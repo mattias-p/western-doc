@@ -1,0 +1,44 @@
+@startuml
+
+[*] --> Producer : start
+
+Producer --> Title : skip | complete
+
+Title --> Menu : skip | complete
+
+Menu --> Intro : start
+
+Intro --> Game : skip | complete
+
+Game --> GameOver : death[lives=0]
+Game --> End : win[boss=final_boss]
+
+
+GameOver --> Menu : skip | complete
+
+End --> Title : skip | complete
+
+state Game {
+  [*] --> Level
+  Level --> Story : win[boss!=final_boss]
+  Level --> Shop : interact[npc=shop]
+  Level --> Pause : pause
+  Level --> Level : death[lives>0]
+  Level --> Level : interact[npc!=shop]
+  Pause --> Level : exit
+  Shop --> Level : exit
+  Story --> Level : skip | complete
+}
+
+Producer : CutScene
+Title : CutScene
+Menu : Menu
+Intro : CutScene
+Level : GamePlay
+GameOver : CutScene
+Shop : Menu
+Story : CutScene
+Pause : Menu
+End : CutScene
+
+@enduml
